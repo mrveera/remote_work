@@ -19,13 +19,16 @@ class VA():
 
     def add_skill(self, cmd, action):
         if not cmd in self.skills:
-            self.skills[cmd]=action
+            self.skills[cmd.replace(" ","_")]=action
             return
         else:
             raise "Already existed"
 
     def match_cmd(self, cmd):
         cmds = self.skills.keys()
+        print(cmd.replace(" ","_"))
+        if cmd.replace(" ","_") in self.skills:
+            return (True, cmd.replace(" ","_"))
         possible_cmds = cmd.split(" ")
         for possible_cmd in possible_cmds:
             if possible_cmd in cmds:
@@ -34,7 +37,8 @@ class VA():
 
     def invoke_cmd(self,cmd,text):
         args =  text.split(" ")
-        args.remove(cmd)
+        if cmd in args:
+            args.remove(cmd)
         self.skills[cmd](" ".join(args))
 
     def listen(self):
@@ -48,13 +52,14 @@ class VA():
             print(self.guess)
             if(self.should_listen()):
                 cmd = recognize_speech_from_mic(recognizer, microphone,True)
+                print(cmd)
                 if not cmd["success"]:
                     speak("I did not catch that. What did you say?")
                     continue
                 if cmd["error"]:
                     speak("I dont know that")
                     continue
-                input = cmd["transcription"].lower().replace("'","\\'")
+                input = cmd["transcription"].lower().strip().replace("'","\\'")
                 maybe_cmd = self.match_cmd(input)
                 if maybe_cmd[0]:
                     self.invoke_cmd(maybe_cmd[1],input)

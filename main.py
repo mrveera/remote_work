@@ -13,7 +13,8 @@ def start_zoom_meeting(cmd):
     os.popen(abs_dir +"/zoom.sh --name="+zoom_name+" "+zoom_id)
 
 def play_music(cmd):
-    speak("I can play if you give play list")
+    speak("I will play wait")
+    os.popen("cd ~/Downloads/songs && vlc .")
 
 def open_jenkins(cmd):
     speak("opening jenkins radiator view")
@@ -23,11 +24,11 @@ def open_jenkins(cmd):
 def updating_me(cmd):
     speak("updating myself wait")
     os.popen("cd "+ abs_dir + " && git pull")
-    sys.exit(120)
+    sys.exit(242)
 
-va = VA("hey guys")
+va = VA("alexa")
 va.add_skill("zoom",start_zoom_meeting)
-va.add_skill("open jenkins",open_jenkins)
+va.add_skill("open_jenkins",open_jenkins)
 va.add_skill("play",play_music)
-va.add_skill("self update", updating_me)
+va.add_skill("self_update", updating_me)
 va.listen()
